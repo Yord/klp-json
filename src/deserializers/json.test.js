@@ -28,6 +28,32 @@ test('deserializes json elements as a whole, even if they are formatted over sev
   )
 })
 
+test('deserializer fails if json contains -0 because JSON.stringify transforms it to 0', () => {
+  const err         = []
+  const argv        = {verbose: 0}
+  const lines       = anything()
+
+  const positiveZero = 0
+  const negativeZero = -0
+
+  const jsonsChunks = integer().chain(spaces =>
+    constant({
+      jsons:  [positiveZero],
+      chunks: [negativeZero].map(json => JSON.stringify(json, null, spaces))
+    })
+  )
+
+  assert(
+    property(lines, jsonsChunks, (lines, {jsons, chunks}) =>
+      expect(
+        deserializer(argv)(chunks, lines)
+      ).toStrictEqual(
+        {err, jsons}
+      )
+    )
+  )
+})
+
 test('deserializing text that is not json throws one of a list of errors, not using lines since verbose is 0', () => {
   const argv                     = {verbose: 0}
   const lines                    = anything()

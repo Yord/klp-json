@@ -66,7 +66,7 @@ test('deserializing text that is not json fails with exactly one error and the f
             ? []
             : [
               {
-                msg: 'Unexpected token < in JSON at position 1 (if the JSON is formatted over several lines, try using the jsonObj chunker)',
+                msg: 'Unexpected token u in JSON at position 2 (if the JSON is formatted over several lines, try using the jsonObj chunker)',
                 line: lines[0]
               }
             ]
@@ -101,7 +101,7 @@ test('deserializing text that is not json fails with exactly one error, the firs
             ? []
             : [
               {
-                msg: 'Unexpected token < in JSON at position 1 (if the JSON is formatted over several lines, try using the jsonObj chunker)',
+                msg: 'Unexpected token u in JSON at position 2 (if the JSON is formatted over several lines, try using the jsonObj chunker)',
                 line: lines[0],
                 info: '[' + chunks.join(',') + ']'
               }
@@ -182,7 +182,7 @@ test('deserializing text that is not json fails with errors and lines if verbose
           lines,
           err: lines.map(line =>
             ({
-              msg: 'Unexpected token < in JSON at position 0 (if the JSON is formatted over several lines, try using the jsonObj chunker)',
+              msg: 'Unexpected token u in JSON at position 1 (if the JSON is formatted over several lines, try using the jsonObj chunker)',
               line
             })
           )
@@ -213,7 +213,7 @@ test('deserializing text that is not json fails with errors, lines, and info if 
           lines,
           err: lines.map(
             (line, index) => ({
-              msg: 'Unexpected token < in JSON at position 0 (if the JSON is formatted over several lines, try using the jsonObj chunker)',
+              msg: 'Unexpected token u in JSON at position 1 (if the JSON is formatted over several lines, try using the jsonObj chunker)',
               line,
               info: chunks[index]
             })

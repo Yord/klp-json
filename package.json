@@ -1,6 +1,6 @@
 {
   "name": "klp-json",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A JSON plugin for `klp` (Kelpie), the small, fast, and magical command-line data processor.",
   "keywords": [
     "klp",

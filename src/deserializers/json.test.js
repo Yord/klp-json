@@ -28,6 +28,32 @@ test('deserializes json elements as a whole, even if they are formatted over sev
   )
 })
 
+test('deserializer fails if json contains -0 because JSON.stringify transforms it to 0', () => {
+  const err         = []
+  const argv        = {verbose: 0}
+  const lines       = anything()
+
+  const positiveZero = 0
+  const negativeZero = -0
+
+  const jsonsChunks = integer().chain(spaces =>
+    constant({
+      jsons:  [positiveZero],
+      chunks: [negativeZero].map(json => JSON.stringify(json, null, spaces))
+    })
+  )
+
+  assert(
+    property(lines, jsonsChunks, (lines, {jsons, chunks}) =>
+      expect(
+        deserializer(argv)(chunks, lines)
+      ).toStrictEqual(
+        {err, jsons}
+      )
+    )
+  )
+})
+
 test('deserializing text that is not json throws one of a list of errors, not using lines since verbose is 0', () => {
   const argv                     = {verbose: 0}
   const lines                    = anything()
@@ -66,7 +92,7 @@ test('deserializing text that is not json fails with exactly one error and the f
             ? []
             : [
               {
-                msg: 'Unexpected token < in JSON at position 1 (if the JSON is formatted over several lines, try using the jsonObj chunker)',
+                msg: 'Unexpected token u in JSON at position 2 (if the JSON is formatted over several lines, try using the jsonObj chunker)',
                 line: lines[0]
               }
             ]
@@ -101,7 +127,7 @@ test('deserializing text that is not json fails with exactly one error, the firs
             ? []
             : [
               {
-                msg: 'Unexpected token < in JSON at position 1 (if the JSON is formatted over several lines, try using the jsonObj chunker)',
+                msg: 'Unexpected token u in JSON at position 2 (if the JSON is formatted over several lines, try using the jsonObj chunker)',
                 line: lines[0],
                 info: '[' + chunks.join(',') + ']'
               }
@@ -182,7 +208,7 @@ test('deserializing text that is not json fails with errors and lines if verbose
           lines,
           err: lines.map(line =>
             ({
-              msg: 'Unexpected token < in JSON at position 0 (if the JSON is formatted over several lines, try using the jsonObj chunker)',
+              msg: 'Unexpected token u in JSON at position 1 (if the JSON is formatted over several lines, try using the jsonObj chunker)',
               line
             })
           )
@@ -213,7 +239,7 @@ test('deserializing text that is not json fails with errors, lines, and info if 
           lines,
           err: lines.map(
             (line, index) => ({
-              msg: 'Unexpected token < in JSON at position 0 (if the JSON is formatted over several lines, try using the jsonObj chunker)',
+              msg: 'Unexpected token u in JSON at position 1 (if the JSON is formatted over several lines, try using the jsonObj chunker)',
               line,
               info: chunks[index]
             })
